@@ -115,7 +115,6 @@ export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
 ) {
-  console.log('Authenticating...');
   try {
     await signIn('credentials', formData, '/dashboard'); // a specail function as an output of NextAuth distructing;
   } catch (error) {

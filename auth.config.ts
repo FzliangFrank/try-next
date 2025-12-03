@@ -9,6 +9,8 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       console.log('Evaluate auth config callback!');
       console.log(`Evaluated at ${nextUrl.pathname}`);
+      console.log('auth:', auth);
+      console.log('auth type:', typeof auth);
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
       if (isOnDashboard) {
