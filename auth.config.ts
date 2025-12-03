@@ -1,5 +1,5 @@
-
 import type { NextAuthConfig } from 'next-auth';
+import { NextResponse } from 'next/server';
  
 export const authConfig = {
   pages: {
@@ -7,19 +7,17 @@ export const authConfig = {
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
+      console.log('Evaluate auth config callback!');
+      console.log(`Evaluated at ${nextUrl.pathname}`);
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
       if (isOnDashboard) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn) {
-        try {
-          return Response.redirect(new URL('/dashboard', nextUrl));
-        } catch (error) {
-          console.log('Error is caught while redirecting to dashboard');
-          console.log('nextUrl:', nextUrl);
-          console.log('error:', error);
-          throw error;
+        // Redirect logged-in users away from login page to dashboard
+        if (nextUrl.pathname.startsWith('/login')) {
+          return NextResponse.redirect(new URL('/dashboard', nextUrl));
         }
       }
       return true;
